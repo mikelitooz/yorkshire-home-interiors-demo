@@ -1,15 +1,18 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { SlidersHorizontal, SearchX } from "lucide-react";
-import { categories, Product, products } from "@/data/ecommerce";
+import { categories } from "@/data/ecommerce";
 import { ProductCard } from "@/components/ecommerce/ProductCard";
+import { DEFAULT_SORT, selectProducts, type SortBy } from "@/lib/collection";
 
 type ShopViewProps = {
   initialQuery?: string;
   initialCategory?: string;
   initialRoom?: string;
   offerOnly?: boolean;
+  /** Server-rendered breadcrumb, so the visible trail and BreadcrumbList schema match. */
+  breadcrumb?: ReactNode;
 };
 
 export function ShopView({
@@ -17,46 +20,32 @@ export function ShopView({
   initialCategory = "all",
   initialRoom = "all",
   offerOnly = false,
+  breadcrumb,
 }: ShopViewProps) {
   const [query, setQuery] = useState(initialQuery);
   const [category, setCategory] = useState(initialCategory);
   const [room, setRoom] = useState(initialRoom);
-  const [sortBy, setSortBy] = useState("featured");
+  const [sortBy, setSortBy] = useState<SortBy>(DEFAULT_SORT);
 
-  const filtered = useMemo(() => {
-    let current: Product[] = [...products];
-    if (category !== "all") current = current.filter((p) => p.category === category);
-    if (room !== "all") current = current.filter((p) => p.room === room);
-    if (offerOnly) current = current.filter((p) => p.offer);
-    if (query.trim().length > 0) {
-      const normalized = query.toLowerCase();
-      current = current.filter(
-        (p) =>
-          p.name.toLowerCase().includes(normalized) ||
-          p.shortDescription.toLowerCase().includes(normalized) ||
-          p.category.toLowerCase().includes(normalized)
-      );
-    }
-
-    if (sortBy === "price-low") current.sort((a, b) => a.price - b.price);
-    if (sortBy === "price-high") current.sort((a, b) => b.price - a.price);
-    if (sortBy === "name") current.sort((a, b) => a.name.localeCompare(b.name));
-    if (sortBy === "featured")
-      current.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
-    return current;
-  }, [category, offerOnly, query, room, sortBy]);
+  // Shared with the server so a category page's ItemList schema names exactly
+  // these cards, in this order. See src/lib/collection.ts.
+  const filtered = useMemo(
+    () => selectProducts({ category, room, offerOnly, query, sortBy }),
+    [category, offerOnly, query, room, sortBy]
+  );
 
   const clearFilters = () => {
     setQuery("");
     setCategory("all");
     setRoom("all");
-    setSortBy("featured");
+    setSortBy(DEFAULT_SORT);
   };
 
   const hasActiveFilters = query.length > 0 || category !== "all" || room !== "all";
 
   return (
     <main className="mx-auto max-w-7xl px-4 pb-14 pt-8 sm:px-6 lg:px-8">
+      {breadcrumb}
       <h1 className="font-display text-4xl font-bold text-charcoal sm:text-5xl">
         {offerOnly ? "Special Offers" : "Shop Furniture"}
       </h1>
@@ -104,7 +93,7 @@ export function ShopView({
           </select>
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
+            onChange={(e) => setSortBy(e.target.value as SortBy)}
             className="input-field"
           >
             <option value="featured">Sort: Featured</option>
