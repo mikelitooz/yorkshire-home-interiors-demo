@@ -7,6 +7,7 @@ import { ChevronRight, ShieldCheck, Truck } from "lucide-react";
 import type { Product } from "@/data/ecommerce";
 import { currency, getRelatedProducts } from "@/data/ecommerce";
 import { ProductCard } from "@/components/ecommerce/ProductCard";
+import { PaymentMethods } from "@/components/ecommerce/PaymentMethods";
 import { useCart } from "@/components/cart/CartProvider";
 
 export function ProductDetailView({ product }: { product: Product }) {
@@ -129,6 +130,10 @@ export function ProductDetailView({ product }: { product: Product }) {
               Add to basket
             </button>
           </div>
+
+          {/* Ways to pay — directly under the buying controls, where the
+              question is actually asked. The list is a claim held in config. */}
+          <PaymentMethods />
         </div>
       </section>
 

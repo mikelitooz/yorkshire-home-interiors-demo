@@ -71,10 +71,18 @@ export function CartDrawer() {
 
         {/* Footer */}
         <div className="border-t border-smoke/50 px-6 py-4">
-          <div className="mb-4 flex items-center justify-between">
-            <p className="text-sm text-taupe">Subtotal</p>
-            <p className="text-xl font-bold text-charcoal">{currency(subtotal)}</p>
-          </div>
+          {/* The drawer is mounted on every page and only slid off-screen when
+              closed, so anything rendered here ships in the HTML of every page.
+              An empty basket used to emit a stray "£0" onto product, category
+              and home pages, next to real prices. The subtotal row is
+              presentational, so it renders only when there is a subtotal to
+              show; the basket total itself is unchanged. */}
+          {lines.length > 0 && (
+            <div className="mb-4 flex items-center justify-between">
+              <p className="text-sm text-taupe">Subtotal</p>
+              <p className="text-xl font-bold text-charcoal">{currency(subtotal)}</p>
+            </div>
+          )}
           <div className="grid gap-2">
             <Link href="/cart" onClick={closeCart} className="btn-secondary w-full justify-center">View basket</Link>
             <Link href="/checkout" onClick={closeCart} className="btn-primary w-full justify-center">Checkout</Link>
