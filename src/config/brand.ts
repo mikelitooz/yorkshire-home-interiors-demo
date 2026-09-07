@@ -195,8 +195,9 @@ export type PaymentMethod = { label: string; description: string };
  * The accepted payment methods. Confirmed by Mike on 7 September 2026:
  * Visa, Mastercard, Google Pay, Apple Pay, Klarna and Amex.
  *
- * Klarna is listed first because on big-ticket furniture the credit option is
- * often the decision, not an afterthought.
+ * The order below is the order Mike specified, cards first. The skill suggests
+ * leading with the credit option on big-ticket items; that was tried and
+ * changed back deliberately, so do not "restore" Klarna to the front.
  *
  * A payment mark is a promise. This list must match what the payment gateway
  * actually has enabled, and the demo has no gateway connected yet, so RE-CHECK
@@ -211,12 +212,12 @@ export type PaymentMethod = { label: string; description: string };
 export const paymentMethodsAreConfirmed = true;
 
 export const paymentMethods: PaymentMethod[] = [
-  { label: "Klarna", description: "Klarna, to spread the cost" },
   { label: "Visa", description: "Visa credit and debit cards" },
   { label: "Mastercard", description: "Mastercard credit and debit cards" },
-  { label: "Amex", description: "American Express" },
-  { label: "Apple Pay", description: "Apple Pay" },
   { label: "Google Pay", description: "Google Pay" },
+  { label: "Apple Pay", description: "Apple Pay" },
+  { label: "Klarna", description: "Klarna, to spread the cost" },
+  { label: "Amex", description: "American Express" },
 ];
 
 /* ── Promises (trust strip, footer band, listing hero, PDP, basket) ── */
