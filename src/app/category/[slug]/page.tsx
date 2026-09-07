@@ -3,31 +3,43 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { ShopView } from "@/components/ecommerce/ShopView";
-import { FaqAccordion, faqPageSchema } from "@/components/ui/FaqAccordion";
+import { ListingNote } from "@/components/sections/ListingNote";
+import { faqPageSchema } from "@/components/ui/FaqAccordion";
 import { categoryCopyFor } from "@/config/category-copy";
-import { getCategoryBySlug } from "@/data/ecommerce";
+import { categories, getCategoryBySlug } from "@/data/ecommerce";
 import { initialCategoryProducts } from "@/lib/collection";
 import { breadcrumbListSchema, canonicalFor, collectionPageSchema, jsonLdScript } from "@/lib/seo";
 
 type Props = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 const fallbackDescription = (name: string) => `Shop ${name.toLowerCase()} from Yorkshire Home Interiors.`;
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { slug } = await params;
   const category = getCategoryBySlug(slug);
   if (!category) {
     return { title: "Category not found" };
   }
   const copy = categoryCopyFor(category.slug);
+
+  // The grid filters client-side, so this route ignores query params entirely:
+  // /category/sofas?colour=x serves BYTE-IDENTICAL content at a different URL.
+  // That is a pure duplicate, so noindex it and let the canonical consolidate
+  // onto the clean path. Same rule as /shop and /contact?product=.
+  const isFiltered = Object.values(await searchParams).some(
+    (v) => (Array.isArray(v) ? v.length > 0 : typeof v === "string" && v.length > 0)
+  );
+
   return {
     title: category.name,
     // The meta description is the same short note the visitor reads under the
     // heading, so the snippet and the page agree.
     description: copy?.intro ?? fallbackDescription(category.name),
-    alternates: canonicalFor(`/category/${category.slug}`)
+    alternates: canonicalFor(`/category/${category.slug}`),
+    ...(isFiltered ? { robots: { index: false, follow: true } } : {})
   };
 }
 
@@ -61,6 +73,8 @@ export default async function CategoryPage({ params }: Props) {
     ? [collectionPage, breadcrumbs, faqPageSchema(faqs)]
     : [collectionPage, breadcrumbs];
 
+  const related = categories.filter((c) => c.slug !== category.slug).map((c) => ({ slug: c.slug, name: c.name }));
+
   return (
     <>
       <script
@@ -87,33 +101,7 @@ export default async function CategoryPage({ params }: Props) {
         }
         afterGrid={
           copy ? (
-            <section
-              aria-labelledby="category-guide"
-              className="mt-14 rounded-card border border-smoke/50 bg-white p-6 shadow-card sm:p-8 lg:p-10"
-            >
-              <h2
-                id="category-guide"
-                className="font-display text-2xl font-bold text-charcoal sm:text-3xl"
-              >
-                {copy.longForm.heading}
-              </h2>
-              <div className="mt-5 max-w-3xl space-y-4">
-                {copy.longForm.paragraphs.map((paragraph) => (
-                  <p key={paragraph.slice(0, 48)} className="text-sm leading-7 text-taupe">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-
-              {faqs.length > 0 && (
-                <>
-                  <h2 className="mt-10 font-display text-2xl font-bold text-charcoal sm:text-3xl">
-                    {category.name} questions
-                  </h2>
-                  <FaqAccordion items={faqs} />
-                </>
-              )}
-            </section>
+            <ListingNote copy={copy} related={related} faqHeading={`${category.name} questions`} />
           ) : null
         }
       />

@@ -66,7 +66,7 @@ export const media = {
 export const navigation = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
-  { label: "Collection", href: "/collection" },
+  { label: "Collection", href: "/shop" },
   { label: "Services", href: "/services" },
   { label: "Gallery", href: "/gallery" },
   { label: "Contact", href: "/contact" }

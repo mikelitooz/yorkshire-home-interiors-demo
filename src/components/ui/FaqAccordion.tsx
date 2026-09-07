@@ -9,8 +9,9 @@ import { ChevronDown } from "lucide-react";
  *
  * TWO DEVIATIONS FROM THE ASSET, both deliberate:
  *  1. The asset renders each question as an <h2>. Here the accordion sits
- *     inside a section that already has its own <h2>, so questions are <h3> to
- *     keep the document outline correct.
+ *     inside a section that has its own <h2>, under an <h3> heading for the
+ *     question block, so questions are <h4> to keep the document outline
+ *     correct.
  *  2. The asset carries `a` (ReactNode) and `aText` (its plain-text twin for
  *     schema) as separate fields, which can drift. These answers are plain
  *     prose, so a single string feeds both the rendered answer and the
@@ -30,7 +31,7 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
         <li key={q} className="border-b border-smoke/60">
           <details className="group">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-4 text-left">
-              <h3 className="text-sm font-semibold text-charcoal">{q}</h3>
+              <h4 className="text-sm font-semibold text-charcoal">{q}</h4>
               <ChevronDown
                 className="h-4 w-4 shrink-0 text-taupe transition-transform duration-300 group-open:rotate-180 motion-reduce:transition-none"
                 aria-hidden="true"

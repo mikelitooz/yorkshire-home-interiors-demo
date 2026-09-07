@@ -34,7 +34,7 @@ export function Hero() {
                 with friendly advice, delivery and assembly support.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button href="/collection" variant="light">
+                <Button href="/shop" variant="light">
                   Explore collection
                 </Button>
                 <Button href="/contact" variant="ghost" className="border-white/20 bg-white/10 text-white hover:bg-white/15">
