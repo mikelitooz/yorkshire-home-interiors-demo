@@ -97,7 +97,20 @@ export function ContactView({ product }: { product?: ProductContext }) {
               </section>
             )}
 
-            <ContactForm productSlug={product?.slug} productName={product?.name} />
+            {/* `key` forces a remount when the enquiry subject changes.
+                Next's App Router keeps the same segment cache key across a
+                search-param-only navigation, so moving between
+                /contact?product=<slug> and /contact re-renders this form
+                instead of remounting it. The textarea is uncontrolled, so its
+                defaultValue would not be reapplied: the box kept the previous
+                product's prefill while productSlug had already become
+                undefined, which would send the shop a message naming a product
+                with no link to it. */}
+            <ContactForm
+              key={product?.slug ?? "general"}
+              productSlug={product?.slug}
+              productName={product?.name}
+            />
 
             <div className="mt-8 grid min-h-72 place-items-center rounded-[1.5rem] bg-linen p-6 text-center">
               <div>
