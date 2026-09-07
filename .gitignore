@@ -7,3 +7,6 @@ node_modules
 .env.development.local
 .env.test.local
 .env.production.local
+# A backup of an env file is still an env file. This pattern has saved a repo
+# from a committed .env.local.backup more than once.
+.env*.backup*

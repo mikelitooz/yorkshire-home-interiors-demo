@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { ChevronRight, ShieldCheck, Truck } from "lucide-react";
+import { ChevronRight, MessageSquare, ShieldCheck, Truck } from "lucide-react";
 import type { Product } from "@/data/ecommerce";
 import { currency, getRelatedProducts } from "@/data/ecommerce";
 import { ProductCard } from "@/components/ecommerce/ProductCard";
@@ -130,6 +130,18 @@ export function ProductDetailView({ product }: { product: Product }) {
               Add to basket
             </button>
           </div>
+
+          {/* Secondary route for the buyer who has a question rather than a
+              decision. It carries the SLUG and nothing else: the slug is the one
+              value /contact can check against the catalogue, so a crafted link
+              cannot show a product and a price we never sold. */}
+          <Link
+            href={`/contact?product=${encodeURIComponent(product.slug)}`}
+            className="btn-secondary mt-3 w-full justify-center py-3.5"
+          >
+            <MessageSquare className="h-4 w-4" aria-hidden="true" />
+            Enquire online
+          </Link>
 
           {/* Ways to pay — directly under the buying controls, where the
               question is actually asked. The list is a claim held in config. */}
