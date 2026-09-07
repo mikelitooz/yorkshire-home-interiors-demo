@@ -13,6 +13,12 @@ type ShopViewProps = {
   offerOnly?: boolean;
   /** Server-rendered breadcrumb, so the visible trail and BreadcrumbList schema match. */
   breadcrumb?: ReactNode;
+  /** Page H1. Defaults to the generic shop heading for /shop and /collection. */
+  heading?: string;
+  /** Short note directly under the heading. */
+  intro?: string;
+  /** Long-form note rendered below the product grid. */
+  afterGrid?: ReactNode;
 };
 
 export function ShopView({
@@ -21,6 +27,9 @@ export function ShopView({
   initialRoom = "all",
   offerOnly = false,
   breadcrumb,
+  heading,
+  intro,
+  afterGrid,
 }: ShopViewProps) {
   const [query, setQuery] = useState(initialQuery);
   const [category, setCategory] = useState(initialCategory);
@@ -47,12 +56,13 @@ export function ShopView({
     <main className="mx-auto max-w-7xl px-4 pb-14 pt-8 sm:px-6 lg:px-8">
       {breadcrumb}
       <h1 className="font-display text-4xl font-bold text-charcoal sm:text-5xl">
-        {offerOnly ? "Special Offers" : "Shop Furniture"}
+        {heading ?? (offerOnly ? "Special Offers" : "Shop Furniture")}
       </h1>
-      <p className="mt-2 text-sm text-taupe">
-        {offerOnly
-          ? "Handpicked offers on sofas, beds, dining and decor from Yorkshire Home Interiors."
-          : "Browse sofas, beds, dining, decor and more from Yorkshire Home Interiors."}
+      <p className="mt-3 max-w-2xl text-sm leading-7 text-taupe">
+        {intro ??
+          (offerOnly
+            ? "Handpicked offers on sofas, beds, dining and decor from Yorkshire Home Interiors."
+            : "Browse sofas, beds, dining, decor and more from Yorkshire Home Interiors.")}
       </p>
 
       {/* ── Filter panel ─────────────────────────── */}
@@ -138,6 +148,8 @@ export function ShopView({
           </div>
         )}
       </section>
+
+      {afterGrid}
     </main>
   );
 }
