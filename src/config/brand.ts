@@ -192,34 +192,31 @@ export const financeIsAdvertisable =
 export type PaymentMethod = { label: string; description: string };
 
 /**
- * TODO CONFIRM (client) — REQUIRED BEFORE LAUNCH. Confirm, in writing:
- *   1. Which card schemes the payment gateway has enabled (Visa, Mastercard,
- *      Amex — Amex is frequently NOT enabled and is the usual mistake).
- *   2. Whether Apple Pay and Google Pay are enabled.
- *   3. Whether PayPal is offered.
- *   4. Whether any buy-now-pay-later provider (Klarna, Clearpay) is
- *      contracted, and under what name it appears at checkout.
- *   5. Whether the methods accepted in the showroom differ from those online.
+ * The accepted payment methods. Confirmed by Mike on 7 September 2026:
+ * Visa, Mastercard, Google Pay, Apple Pay, Klarna and Amex.
  *
- * The list below is DEMO CONTENT for the client presentation. It is labelled
- * as a sample on the page, gated by `paymentMethodsAreConfirmed`, and must not
- * be presented as fact. A payment mark is a promise: showing an Amex badge
- * when Amex is disabled fails the customer at the checkout screen.
+ * Klarna is listed first because on big-ticket furniture the credit option is
+ * often the decision, not an afterthought.
  *
- * When the client confirms: replace this list with the real one, set
- * `paymentMethodsAreConfirmed` to true, and delete this TODO block in the same
- * change.
+ * A payment mark is a promise. This list must match what the payment gateway
+ * actually has enabled, and the demo has no gateway connected yet, so RE-CHECK
+ * it against the live gateway's settings before the store takes a real order —
+ * Amex in particular is commonly present in a merchant agreement but switched
+ * off in the gateway, and an Amex badge with Amex disabled fails the customer
+ * at the checkout screen.
  *
- * Credit option first — on big-ticket furniture it is often the decision.
+ * Still worth asking the client, but not blocking: whether the methods
+ * accepted in the Sheffield showroom differ from those offered online.
  */
-export const paymentMethodsAreConfirmed = false;
+export const paymentMethodsAreConfirmed = true;
 
 export const paymentMethods: PaymentMethod[] = [
-  { label: "Klarna", description: "Sample only, not yet confirmed: Klarna, to spread the cost" },
-  { label: "Visa", description: "Sample only, not yet confirmed: Visa credit and debit cards" },
-  { label: "Mastercard", description: "Sample only, not yet confirmed: Mastercard credit and debit cards" },
-  { label: "Apple Pay", description: "Sample only, not yet confirmed: Apple Pay" },
-  { label: "Google Pay", description: "Sample only, not yet confirmed: Google Pay" },
+  { label: "Klarna", description: "Klarna, to spread the cost" },
+  { label: "Visa", description: "Visa credit and debit cards" },
+  { label: "Mastercard", description: "Mastercard credit and debit cards" },
+  { label: "Amex", description: "American Express" },
+  { label: "Apple Pay", description: "Apple Pay" },
+  { label: "Google Pay", description: "Google Pay" },
 ];
 
 /* ── Promises (trust strip, footer band, listing hero, PDP, basket) ── */
