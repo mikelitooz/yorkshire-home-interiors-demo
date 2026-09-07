@@ -92,7 +92,10 @@ export function ContactForm({
 
   if (status.state === "sent") {
     return (
-      <div role="status" className="rounded-card border border-smoke/60 bg-cream p-8 text-center sm:p-10">
+      <div
+        role="status"
+        className="rounded-card border border-smoke/60 bg-white p-8 text-center shadow-card sm:p-10"
+      >
         <h2 className="font-display text-2xl font-bold text-charcoal">Message sent</h2>
         <p className="mx-auto mt-3 max-w-sm text-sm leading-7 text-taupe">
           Thanks for your enquiry. We will get back to you as soon as possible.
@@ -105,17 +108,20 @@ export function ContactForm({
   }
 
   return (
-    <form ref={formRef} onSubmit={onSubmit} noValidate>
-      <h2 className="font-display text-2xl font-bold text-charcoal">
-        {productName ? "Ask about this product" : "Send us a message"}
-      </h2>
+    <form
+      ref={formRef}
+      onSubmit={onSubmit}
+      noValidate
+      className="rounded-card border border-smoke/60 bg-white p-6 shadow-card sm:p-8"
+    >
+      {/* Constant heading, as on the Furniture Lovers storefront: the product
+          being asked about is already named in the panel directly above. */}
+      <h2 className="font-display text-2xl font-bold text-charcoal">Send Us a Message</h2>
 
       <div className="mt-6 grid gap-4">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Name" name="name" type="text" autoComplete="name" required maxLength={ENQUIRY_LIMITS.name} disabled={sending} />
-          <Field label="Phone" name="phone" type="tel" autoComplete="tel" optional maxLength={ENQUIRY_LIMITS.phone} disabled={sending} />
-        </div>
+        <Field label="Name" name="name" type="text" autoComplete="name" required maxLength={ENQUIRY_LIMITS.name} disabled={sending} />
         <Field label="Email" name="email" type="email" autoComplete="email" required maxLength={ENQUIRY_LIMITS.email} disabled={sending} />
+        <Field label="Phone" name="phone" type="tel" autoComplete="tel" optional maxLength={ENQUIRY_LIMITS.phone} disabled={sending} />
         <div>
           <label htmlFor="message" className="block text-xs font-semibold uppercase tracking-[0.12em] text-taupe">
             Message
@@ -172,7 +178,7 @@ export function ContactForm({
         disabled={sending}
         className="btn-primary mt-6 w-full justify-center py-3.5 disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {sending ? "Sending…" : "Send enquiry"}
+        {sending ? "Sending…" : "Send Message"}
       </button>
     </form>
   );

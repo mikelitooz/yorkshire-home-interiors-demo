@@ -92,9 +92,13 @@ export function validateEnquiry(input: unknown): ValidationResult {
   return { ok: true, enquiry: { name, email, phone: phone || undefined, message, product } };
 }
 
-/** Opening line of the message when arriving from Enquire online; the customer edits it. */
+/**
+ * Opening line of the message when arriving from Enquire online; the customer
+ * edits it. Wording matches the Furniture Lovers storefront the pattern comes
+ * from, rather than the skill asset's phrasing, so the two sites read alike.
+ */
 export function prefilledMessage(productName: string): string {
-  return `Hi, I have a question about the ${productName}.`;
+  return `Hi, I would like to enquire about: ${productName}.`;
 }
 
 export function enquiryEmail(e: Enquiry): { subject: string; text: string } {
